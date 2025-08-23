@@ -1,0 +1,2512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xenthis Technologies</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="logo.png" type="image/x-icon">
+
+    <style>
+        :root {
+            --primary: #0F5956;
+            --primary-rgb: 15, 89, 86;
+            --secondary: #f4f7f9;
+            --accent: #17a2b8;
+            --dark: #1a252f;
+            --light: #ffffff;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            color: var(--dark);
+            background-color: var(--light);
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        /* Modern Loading Screen */
+      .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease-out, visibility 0.8s ease-out;
+        }
+        
+        .loading-container {
+            text-align: center;
+            max-width: 600px;
+            padding: 40px;
+            /* background: rgba(255, 255, 255, 0.1); */
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            /* box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2); */
+        }
+        
+        .logo {
+            margin-bottom: 30px;
+        }
+        
+        .logo h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #fff, #17a2b8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .logo p {
+            font-size: 1rem;
+            opacity: 0.8;
+            letter-spacing: 1px;
+            color: white;
+        }
+        
+        .loader {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 30px 0;
+            position: relative;
+        }
+        
+        .progress {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(to right, #0F5956, #17a2b8);
+            border-radius: 10px;
+            transition: width 4.8s linear;
+        }
+        
+        .spinner {
+            width: 60px;
+            height: 60px;
+            margin: 20px auto;
+            position: relative;
+        }
+        
+        .spinner:before {
+            content: "";
+            box-sizing: border-box;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #17a2b8;
+            animation: spin 1.5s linear infinite;
+        }
+        
+        .dots-container {
+            display: flex;
+            justify-content: center;
+            margin: 25px 0;
+        }
+        
+        .dot {
+            width: 12px;
+            height: 12px;
+            margin: 0 6px;
+            background: #17a2b8;
+            border-radius: 50%;
+            animation: bounce 1.5s infinite;
+        }
+        
+        .dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        .percentage {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 15px 0;
+            color: white;
+        }
+        
+        .message {
+            font-size: 1.1rem;
+            margin: 10px 0;
+            min-height: 28px;
+            color: white;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .completed {
+            animation: pulse 1s;
+            color: #25D366;
+        }
+        
+        /* Main content initially hidden */
+        .main-content {
+            opacity: 0;
+            transition: opacity 0.8s ease-in;
+        }
+        /* Enhanced Navigation */
+          .navbar {
+            padding: 15px 0;
+            transition: all 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transform: translateY(-100%);
+            opacity: 0;
+        }
+        
+        .navbar.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .navbar.scrolled {
+            padding: 10px 0;
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 800;
+            color: var(--primary) !important;
+            font-size: 1.6rem;
+            letter-spacing: -1px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        /* NEW: Navbar Logo */
+        .navbar-logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            transform: rotate(45deg);
+        }
+        
+        .navbar-logo span {
+            transform: rotate(-45deg);
+        }
+        
+        .navbar-brand:hover {
+            transform: translateY(-2px);
+            text-shadow: 0 5px 15px rgba(var(--primary-rgb), 0.3);
+        }
+        
+        .nav-link {
+            color: var(--dark) !important;
+            font-weight: 500;
+            margin: 0 12px;
+            position: relative;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 8px 15px !important;
+            border-radius: 30px;
+        }
+        
+        .nav-link i {
+            margin-right: 8px;
+            font-size: 1.1rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .nav-link:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 30px;
+            opacity: 0;
+            z-index: -1;
+            transition: all 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+            transform: scale(0.8);
+        }
+        
+        .nav-link:hover {
+            color: white !important;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(var(--primary-rgb), 0.2);
+        }
+        
+        .nav-link:hover i {
+            transform: rotate(15deg) scale(1.2);
+        }
+        
+        .nav-link:hover:before {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .nav-link.active {
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white !important;
+            box-shadow: 0 5px 15px rgba(var(--primary-rgb), 0.3);
+        }
+        
+        /* Custom hamburger menu */
+        .navbar-toggler {
+            border: none;
+            padding: 0;
+            width: 30px;
+            height: 20px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+        
+        .navbar-toggler span {
+            display: block;
+            position: absolute;
+            height: 3px;
+            width: 100%;
+            background: var(--primary);
+            border-radius: 3px;
+            opacity: 1;
+            left: 0;
+            transform: rotate(0deg);
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-toggler span:nth-child(1) {
+            top: 0;
+        }
+        
+        .navbar-toggler span:nth-child(2) {
+            top: 8px;
+        }
+        
+        .navbar-toggler span:nth-child(3) {
+            top: 16px;
+        }
+        
+        .navbar-toggler.collapsed span:nth-child(1) {
+            transform: rotate(0deg);
+            top: 0;
+        }
+        
+        .navbar-toggler.collapsed span:nth-child(2) {
+            opacity: 1;
+        }
+        
+        .navbar-toggler.collapsed span:nth-child(3) {
+            transform: rotate(0deg);
+            top: 16px;
+        }
+        
+        .navbar-toggler:not(.collapsed) span:nth-child(1) {
+            top: 8px;
+            transform: rotate(135deg);
+        }
+        
+        .navbar-toggler:not(.collapsed) span:nth-child(2) {
+            opacity: 0;
+            left: -30px;
+        }
+        
+        .navbar-toggler:not(.collapsed) span:nth-child(3) {
+            top: 8px;
+            transform: rotate(-135deg);
+        }
+        
+        /* Sections */
+        section {
+            padding: 40px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .full-height {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        
+        /* UPDATED: Home Section with Improved Background */
+        #home {
+            background: linear-gradient(rgba(15, 89, 86, 0.92), rgba(26, 37, 47, 0.95)), url('https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1469&q=80') no-repeat center center/cover;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .home-content {
+            position: relative;
+            z-index: 3;
+        }
+        
+        .home-logo {
+            width: 200px;
+            margin-bottom: 20px;
+        }
+        
+        .home-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: var(--accent);
+            line-height: 1.2;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .home-subtitle {
+            font-size: 1.6rem;
+            color: var(--accent);
+            margin-bottom: 15px;
+            font-weight: 600;
+            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .home-tagline {
+            font-size: 1.1rem;
+            color: #f0f0f0;
+            margin-bottom: 30px;
+            max-width: 600px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .home-quote {
+            font-style: italic;
+            font-size: 1.2rem;
+            color: var(--light);
+            margin-bottom: 40px;
+            padding-left: 20px;
+            border-left: 4px solid var(--accent);
+            max-width: 600px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-primary {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            padding: 12px 35px;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn-primary:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background-color: var(--light);
+            z-index: -1;
+            transition: width 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+        
+        .btn-primary:hover {
+            color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(23, 162, 184, 0.4);
+        }
+        
+        .btn-primary:hover:before {
+            width: 100%;
+        }
+        
+        /* UPDATED: Home Image with Enhanced Background Animation */
+        .home-image-container {
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .home-image {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 20px;
+            position: relative;
+            z-index: 2;
+            /* box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3); */
+            /* animation: float 6s ease-in-out infinite; */
+        }
+        
+        .home-image-container:before {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            /* background: linear-gradient(45deg, var(--accent), var(--primary)); */
+            opacity: 0.2;
+            filter: blur(50px);
+            z-index: 1;
+            /* animation: pulse 10s ease-in-out infinite alternate-reverse; */
+        }
+        
+        .home-image-container:after {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--dark));
+            opacity: 0.15;
+            filter: blur(40px);
+            z-index: 1;
+            animation: pulse 8s ease-in-out infinite alternate;
+        }
+        
+        /* NEW: Enhanced Background Animation for Home Image */
+        .home-bg-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .home-bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            animation: float 15s infinite linear;
+        }
+        
+        .home-bg-circle:nth-child(1) {
+            width: 150px;
+            height: 150px;
+            top: 10%;
+            left: 10%;
+            animation-duration: 20s;
+        }
+        
+        .home-bg-circle:nth-child(2) {
+            width: 100px;
+            height: 100px;
+            top: 60%;
+            left: 80%;
+            animation-duration: 15s;
+            animation-delay: 2s;
+        }
+        
+        .home-bg-circle:nth-child(3) {
+            width: 200px;
+            height: 200px;
+            top: 30%;
+            left: 60%;
+            animation-duration: 25s;
+            animation-delay: 1s;
+        }
+        
+        .home-bg-circle:nth-child(4) {
+            width: 120px;
+            height: 120px;
+            top: 70%;
+            left: 20%;
+            animation-duration: 18s;
+            animation-delay: 3s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(0.8); opacity: 0.1; }
+            50% { transform: scale(1.1); opacity: 0.2; }
+            100% { transform: scale(0.9); opacity: 0.15; }
+        }
+        
+        /* Scroll Down Animation */
+        .scroll-down {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+        }
+        
+        .scroll-down a {
+            display: block;
+            color: var(--light);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .scroll-down a:hover {
+            color: var(--accent);
+        }
+        
+        .scroll-down .arrow {
+            display: block;
+            font-size: 2.5rem;
+            margin-top: 10px;
+            animation: bounce 2s infinite;
+            color: var(--accent);
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-15px); }
+            60% { transform: translateY(-7px); }
+        }
+                
+        /* About Section */
+        #about {
+            background-color: var(--light);
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 50px;
+            color: var(--dark);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            width: 70px;
+            height: 5px;
+            background-color: var(--primary);
+        }
+        
+        .about-img {
+            border-radius: 15px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1);
+            transition: all 0.8s cubic-bezier(0.215, 0.61, 0.355, 1);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .about-img:hover {
+            transform: perspective(1000px) rotateY(5deg) scale(1.03);
+            box-shadow: 0 40px 70px rgba(0, 0, 0, 0.2);
+        }
+        
+        .about-content {
+            padding-left: 40px;
+        }
+        
+        .about-content h3 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .about-content h3:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--primary);
+        }
+        
+        .about-content p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            transition: all 0.3s ease;
+        }
+        
+        .about-content p:hover {
+            transform: translateX(5px);
+        }
+        
+        /* NEW: Project Stats in About Section */
+        .project-stats {
+            margin-top: 50px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, var(--secondary) 0%, #e8f0f7 100%);
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            transition: all 0.4s ease;
+        }
+        
+        .stat-item:hover {
+            transform: translateY(-10px);
+        }
+        
+        .stat-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            transition: all 0.4s ease;
+        }
+        
+        .stat-item:hover .stat-icon {
+            transform: scale(1.2) rotate(15deg);
+            box-shadow: 0 15px 30px rgba(var(--primary-rgb), 0.3);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            color: var(--primary);
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .stat-text {
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--dark);
+            font-weight: 600;
+        }
+        
+        /* UPDATED: Services Section with Proper Spacing */
+#services {
+    background-color: var(--secondary);
+    position: relative;
+    padding: 80px 0;
+}
+
+.services-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.service-card {
+    background-color: var(--light);
+    border-radius: 20px;
+    padding: 30px 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+    transition: all 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+    cursor: pointer;
+    text-align: center;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.service-card:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+    z-index: -1;
+}
+
+.service-card:hover {
+    transform: translateY(-15px) scale(1.03);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+}
+
+.service-card:hover:before {
+    transform: scaleX(1);
+}
+
+.service-card:hover .service-icon {
+    transform: scale(1.3) rotate(15deg);
+    color: var(--accent);
+}
+
+.service-card:hover .service-title {
+    color: var(--primary);
+    transform: translateY(-5px);
+}
+
+.service-card:hover p {
+    color: var(--dark);
+    transform: translateY(-3px);
+}
+
+.service-icon-container {
+    margin-bottom: 25px;
+    min-height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.service-icon {
+    font-size: 3.5rem;
+    color: var(--primary);
+    transition: all 0.4s ease;
+}
+
+.service-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: var(--dark);
+    transition: all 0.3s ease;
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.service-description {
+    color: #666;
+    transition: all 0.3s ease;
+    line-height: 1.7;
+    margin-bottom: 20px;
+    flex-grow: 1;
+}
+
+.service-cta {
+    color: var(--primary);
+    margin-top: 15px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.service-card:hover .service-cta {
+    transform: translateX(5px);
+}
+/* Grid system for perfect alignment */
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-top: 50px;
+}
+        
+        /* UPDATED: Modal Styles for Better Responsiveness */
+        .modal-content {
+            border-radius: 20px;
+            border: none;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+        
+        .modal-content:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 40px 90px rgba(0, 0, 0, 0.25);
+        }
+        
+        .modal-header {
+            border-bottom: none;
+            padding: 30px 30px 10px;
+            background-color: var(--primary);
+            color: var(--light);
+            position: relative;
+        }
+        
+        .modal-title {
+            font-weight: 700;
+            font-size: 1.8rem;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+        
+        .modal-body {
+            padding: 30px;
+            color: var(--dark);
+        }
+        
+        .modal-body h4 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .modal-body ul {
+            padding-left: 20px;
+        }
+        
+        .modal-body li {
+            margin-bottom: 10px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-body li:hover {
+            transform: translateX(5px);
+        }
+        
+        .modal-body li:before {
+            content: '→';
+            color: var(--primary);
+            position: absolute;
+            left: -20px;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-body li:hover:before {
+            transform: translateX(5px);
+        }
+        
+        /* UPDATED: Modal Layout for Better Responsiveness */
+        @media (min-width: 992px) {
+            .modal-lg {
+                max-width: 900px;
+            }
+            
+            .modal-body .row {
+                flex-direction: column;
+            }
+            
+            .modal-body .col-md-6 {
+                width: 100%;
+                max-width: 100%;
+                flex: 0 0 100%;
+            }
+            
+            .modal-body img {
+                margin-bottom: 30px;
+            }
+        }
+        
+        /* Project Counter Section */
+        #project-counter {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+            color: white;
+            padding: 5px 0;
+        }
+        
+        .counter-item {
+            text-align: center;
+            padding: 5px;
+            position: relative;
+            transition: all 0.4s ease;
+        }
+        
+        .counter-item:hover {
+            transform: translateY(-10px);
+        }
+        
+        .counter-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+            transition: all 0.4s ease;
+        }
+        
+        .counter-item:hover .counter-icon {
+            transform: scale(1.2) rotate(15deg);
+        }
+        
+        .counter-number {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .counter-text {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Contact Section */
+        #contact {
+            background-color: var(--secondary);
+            position: relative;
+        }
+        
+        .contact-details {
+            padding: 30px;
+            background-color: var(--light);
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+            height: 100%;
+            transition: all 0.4s ease;
+        }
+        
+        .contact-details:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1);
+        }
+        
+        .contact-details h3 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 25px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .contact-details h3:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--primary);
+        }
+        
+        .contact-item {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .contact-item:hover {
+            transform: translateX(10px);
+        }
+        
+        .contact-icon {
+            width: 45px;
+            height: 45px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .contact-item:hover .contact-icon {
+            background-color: var(--dark);
+            transform: rotate(15deg);
+        }
+        
+        .contact-detail h5 {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+        
+        .contact-detail p {
+            margin: 0;
+            color: #666;
+        }
+        
+        .social-links {
+            margin-top: 40px;
+        }
+        
+        .social-links h5 {
+            font-size: 1.2rem;
+            color: var(--dark);
+            margin-bottom: 20px;
+        }
+        
+        .social-link {
+            display: inline-flex;
+            width: 45px;
+            height: 45px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            margin-right: 12px;
+            font-size: 1.1rem;
+            transition: all 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .social-link:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--dark);
+            transform: scale(0);
+            border-radius: 50%;
+            transition: transform 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+            z-index: -1;
+        }
+        
+        .social-link:hover {
+            transform: translateY(-5px) rotate(10deg);
+            color: white;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .social-link:hover:before {
+            transform: scale(1);
+        }
+        
+        /* Contact Form Styles */
+        .contact-form {
+            padding: 30px;
+            background-color: var(--light);
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+            transition: all 0.4s ease;
+        }
+        
+        .contact-form:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-control {
+            border-radius: 10px;
+            padding: 15px 20px;
+            border: 1px solid rgba(var(--primary-rgb), 0.2);
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(var(--primary-rgb), 0.25);
+            transform: translateY(-3px);
+        }
+        
+        textarea.form-control {
+            min-height: 150px;
+            resize: none;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 10px;
+            display: block;
+        }
+        .contact-detail a {
+    color: #000000 !important; /* Black color */
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.contact-detail a:hover {
+    color: var(--primary) !important; /* Change to primary color on hover */
+    text-decoration: underline;
+}
+        
+        /* QR Code Section */
+        .qr-section {
+            text-align: center;
+            padding: 30px;
+            /* background-color: var(--light); */
+            border-radius: 20px;
+            /* box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05); */
+            transition: all 0.4s ease;
+            margin-top: 30px;
+        }
+        
+        .qr-section:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1);
+        }
+        
+        .qr-code {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .qr-code img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .qr-text {
+            font-size: 1rem;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+        
+        /* Contact Image */
+        .contact-image {
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .contact-img {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 20px;
+            transition: all 0.5s ease;
+        }
+        
+        .contact-img:hover {
+            transform: scale(1.05) rotate(2deg);
+            box-shadow: 0 40px 70px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* UPDATED: Footer with Proper Layout */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 60px 0 20px;
+            position: relative;
+        }
+        
+        footer:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+        }
+        
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 20px;
+            display: inline-block;
+            letter-spacing: -1px;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-logo:hover {
+            transform: translateY(-3px);
+            text-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        
+        .footer-logo span {
+            color: var(--primary);
+        }
+        
+        .footer-about p {
+            color: #b3b3b3;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-about p:hover {
+            transform: translateX(5px);
+        }
+        
+        .footer-links h5 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 12px;
+        }
+        
+        .footer-links h5:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+        
+        .footer-links h5:hover:after {
+            width: 70px;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links li:hover {
+            transform: translateX(5px);
+        }
+        
+        .footer-links a {
+            color: #b3b3b3;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            position: relative;
+        }
+        
+        .footer-links a:before {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            padding-left: 8px;
+        }
+        
+        .footer-links a:hover:before {
+            width: 15px;
+        }
+        
+        .footer-contact-info {
+            margin-top: 15px;
+        }
+        
+        .footer-contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            color: #b3b3b3;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-contact-item:hover {
+            transform: translateX(5px);
+        }
+        
+        .footer-contact-item i {
+            margin-right: 10px;
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+        
+        .footer-contact-item:hover i {
+            transform: rotate(15deg);
+        }
+        
+        .footer-social-links {
+            margin-top: 20px;
+        }
+        
+        .footer-social-link {
+            display: inline-flex;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-social-link:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(var(--primary-rgb), 0.3);
+        }
+        
+        .copyright {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #b3b3b3;
+            text-align: center;
+        }
+        
+        /* WhatsApp Float */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background-color: #25D366;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
+            animation: pulse-whatsapp 2s infinite;
+        }
+        
+        .whatsapp-float:hover {
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 15px 35px rgba(37, 211, 102, 0.4);
+            animation: none;
+        }
+        
+        @keyframes pulse-whatsapp {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+        
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 45px;
+            height: 45px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            z-index: 99;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            box-shadow: 0 5px 15px rgba(var(--primary-rgb), 0.3);
+        }
+        
+        .back-to-top:hover {
+            background-color: var(--dark);
+            transform: translateY(-5px);
+        }
+        
+        .back-to-top.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* Responsive Styles */
+@media (max-width: 1199.98px) {
+    .service-title {
+        font-size: 1.4rem;
+        min-height: 60px;
+    }
+    
+    .service-icon {
+        font-size: 3rem;
+    }
+}  
+        @media (max-width: 991.98px) {
+            section {
+                padding: 80px 0;
+            }
+            
+            .home-title {
+                font-size: 2.5rem;
+            }
+            
+            .home-subtitle {
+                font-size: 1.4rem;
+            }
+            
+            .home-logo {
+                width: 150px;
+            }
+            
+            .about-content {
+                padding-left: 0;
+                margin-top: 40px;
+            }
+            
+            .contact-details {
+                margin-top: 40px;
+            }
+            
+            .navbar-brand {
+                font-size: 1.4rem;
+            }
+            
+            .home-image {
+                margin-top: 40px;
+                max-width: 300px;
+            }
+            
+            .contact-image {
+                margin-top: 40px;
+            }
+                .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+    
+    .service-card {
+        padding: 25px 20px;
+    }
+    
+    .service-title {
+        font-size: 1.3rem;
+        min-height: 55px;
+    }
+        }
+        
+        /* ...existing code... */
+@media (max-width: 767.98px) {
+    section {
+        padding: 60px 0;
+    }
+    .home-title {
+        font-size: 2.2rem;
+    }
+    .home-subtitle {
+        font-size: 1.3rem;
+    }
+    .home-logo {
+        width: 120px;
+    }
+    .whatsapp-float {
+        width: 55px;
+        height: 55px;
+        font-size: 28px;
+        bottom: 25px;
+        right: 25px;
+    }
+    .back-to-top {
+        bottom: 90px;
+        right: 25px;
+    }
+    .scroll-down {
+        bottom: 25px;
+    }
+    .scroll-down .arrow {
+        font-size: 2rem;
+    }
+    .counter-number {
+        font-size: 2rem;
+    }
+    .services-grid {
+        grid-template-columns: 1fr;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .service-card {
+        padding: 25px;
+    }
+    
+    .service-title {
+        min-height: auto;
+        margin-bottom: 15px;
+    }
+    
+    .service-icon-container {
+        min-height: 80px;
+    }
+}
+/* ...existing code... */
+        @media (max-width: 575.98px) {
+            .home-title {
+                font-size: 2rem;
+            }
+            
+            .home-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .home-quote {
+                font-size: 1rem;
+            }
+            
+            .home-tagline {
+                font-size: 0.95rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .counter-item {
+                padding: 15px;
+            }
+            
+            .counter-number {
+                font-size: 1.8rem;
+            }
+            
+            .counter-text {
+                font-size: 0.9rem;
+            }
+            
+            .nav-link i {
+                margin-right: 6px;
+                font-size: 1rem;
+            }
+                .service-card {
+        padding: 20px 15px;
+    }
+    
+    .service-title {
+        font-size: 1.25rem;
+    }
+    
+    .service-icon {
+        font-size: 2.8rem;
+    }
+        }
+        
+        /* NEW: Enhanced Animation Classes */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+        
+        .animate-on-scroll.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-100px);
+            transition: all 0.8s cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+        
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all 0.8s cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+        
+        .slide-in-left.animated, .slide-in-right.animated {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .zoom-in {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.8s cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+        
+        .zoom-in.animated {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .rotate-in {
+            opacity: 0;
+            transform: rotate(-10deg) scale(0.8);
+            transition: all 0.8s cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+        
+        .rotate-in.animated {
+            opacity: 1;
+            transform: rotate(0) scale(1);
+        }
+        
+        .fade-in {
+            animation: fadeIn 1.5s ease forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* NEW: Additional Animation Effects */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .fade-in-up.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .fade-in-down {
+            opacity: 0;
+            transform: translateY(-30px);
+            transition: all 0.6s ease;
+        }
+        
+        .fade-in-down.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .scale-in {
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .scale-in.animated {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .flip-in {
+            opacity: 0;
+            transform: perspective(1000px) rotateY(90deg);
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .flip-in.animated {
+            opacity: 1;
+            transform: perspective(1000px) rotateY(0);
+        }
+        
+        /* Floating Elements */
+        .floating {
+            animation: floating 6s ease-in-out infinite;
+        }
+        
+        .floating-2 {
+            animation: floating 8s ease-in-out infinite 1s;
+        }
+        
+        .floating-3 {
+            animation: floating 10s ease-in-out infinite 2s;
+        }
+        
+        @keyframes floating {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(5deg); }
+        }
+        
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        /* Particle Animation */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+        
+        .particle {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float-particle 15s infinite linear;
+        }
+        
+        @keyframes float-particle {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-container">
+            <div class="logo">
+                <h1>Xenthis Technologies</h1>
+                <p>Define || Design || Deploy</p>
+            </div>
+            
+            <div class="spinner"></div>
+            
+            <div class="dots-container">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+            
+            <div class="percentage" id="percentage">0%</div>
+            
+            <div class="message" id="message">Welcome !</div>
+            
+            <div class="loader">
+                <div class="progress" id="progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content (initially hidden) -->
+    <div class="main-content" id="mainContent">
+    <!-- Enhanced Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="logo.png" alt="Xenthis Logo" style="width:40px; height:40px; margin-right:10px; border-radius:8px;">
+                <span>Xenthis</span> Technologies
+            </a>
+            <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#home"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about"><i class="fas fa-info-circle"></i> About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#services"><i class="fas fa-cogs"></i> Our Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact"><i class="fas fa-envelope"></i> Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Section with Background Image -->
+    <section id="home" class="full-height">
+        <div class="home-bg-animation">
+            <div class="home-bg-circle"></div>
+            <div class="home-bg-circle"></div>
+            <div class="home-bg-circle"></div>
+            <div class="home-bg-circle"></div>
+        </div>
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 home-content">
+                    <h1 class="home-title slide-in-left">Xenthis <span class="gradient-text" style="color: white;">Technologies</span> </h1>
+                    <h2 class="home-subtitle slide-in-right">Define   ||   Design   ||   Deploy</h2>
+                    <p class="home-quote slide-in-left">"Turning idea's into impact"</p>
+                    <p class="home-tagline slide-in-right">We transform your vision into reality with cutting-edge technology solutions across multiple domains.</p>
+                    <a href="#contact" class="btn btn-primary slide-in-right">Start Your Project</a>
+                </div>
+                <div class="col-lg-6 home-image-container">
+                    <img src="logo.png" alt="Xenthis Technologies" class="home-image zoom-in">
+                </div>
+            </div>
+        </div>
+        <div class="scroll-down">
+            <a href="#about">
+                <span class="arrow"><i class="fas fa-chevron-down"></i></span>
+            </a>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about">
+        <div class="container">
+            <h2 class="section-title text-center animate-on-scroll">About Us</h2>
+            <div class="row">
+                <div class="col-lg-6">
+                    <br><br><br>
+                    <img src="about.gif" alt="Xenthis Team" class="img-fluid about-img slide-in-left">
+                </div>
+                <div class="col-lg-6 about-content">
+                    <h3 class="slide-in-right">Who We Are</h3>
+                    <p class="slide-in-right">Xenthis Technologies is dedicated to transforming ideas into reality for students and businesses alike. We specialize in delivering quality solutions across software development, hardware projects, AI & ML innovations, and editing & logo design—all at minimal cost and with an unwavering commitment to timely delivery.
+
+Our team comprises skilled professionals passionate about empowering clients, whether they're looking to launch a new product, enhance their academic portfolio, or elevate their brand identity. We pride ourselves on being easily contactable and providing 24/7 support, ensuring every project receives personalized attention and reaches its highest potential.
+
+At Xenthis Technologies, our values center around affordability, reliability, innovation, and customer satisfaction. We believe that technology should be accessible to everyone, and we’re here to guide you every step of the way. Your success is our mission.
+
+Let’s build something extraordinary together!</p>
+                </div>
+            </div>
+            
+            <!-- NEW: Project Stats in About Section -->
+            <div class="project-stats mt-5">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="stat-item fade-in-up">
+                            <div class="stat-icon">
+                                <i class="fas fa-briefcase"></i>
+                            </div>
+                            <div class="stat-number">10+</div>
+                            <div class="stat-text">Total Projects</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-item fade-in-up">
+                            <div class="stat-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="stat-number">5+</div>
+                            <div class="stat-text">Projects Completed</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-item fade-in-up">
+                            <div class="stat-icon">
+                                <i class="fas fa-tasks"></i>
+                            </div>
+                            <div class="stat-number">5+</div>
+                            <div class="stat-text">On-Going Projects</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- Our Services Section -->
+<section id="services">
+    <div class="services-container">
+        <h2 class="section-title text-center animate-on-scroll">Our Services</h2>
+        <p class="text-center mb-5 animate-on-scroll" style="max-width: 700px; margin: 0 auto;">We offer comprehensive solutions across multiple technology domains, delivering end-to-end project development from concept to deployment.</p>
+        
+        <div class="services-grid">
+            <div class="service-card zoom-in" data-bs-toggle="modal" data-bs-target="#softwareModal">
+                <div class="service-icon-container">
+                    <div class="service-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                </div>
+                <h3 class="service-title">Software Development</h3>
+                <p class="service-description">Custom applications, enterprise solutions, and scalable platforms tailored to your business needs.</p>
+                <div class="service-cta">Learn more →</div>
+            </div>
+            
+            <div class="service-card zoom-in" data-bs-toggle="modal" data-bs-target="#hardwareModal">
+                <div class="service-icon-container">
+                    <div class="service-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                </div>
+                <h3 class="service-title">Hardware Solutions</h3>
+                <p class="service-description">IoT devices, embedded systems, and smart hardware with seamless software integration.</p>
+                <div class="service-cta">Learn more →</div>
+            </div>
+            
+            <div class="service-card zoom-in" data-bs-toggle="modal" data-bs-target="#aiModal">
+                <div class="service-icon-container">
+                    <div class="service-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                </div>
+                <h3 class="service-title">AI & ML</h3>
+                <p class="service-description">Intelligent systems, predictive analytics, and automation powered by artificial intelligence.</p>
+                <div class="service-cta">Learn more →</div>
+            </div>
+            
+            <div class="service-card zoom-in" data-bs-toggle="modal" data-bs-target="#designModal">
+                <div class="service-icon-container">
+                    <div class="service-icon">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                </div>
+                <h3 class="service-title">Design & UX</h3>
+                <p class="service-description">Beautiful, intuitive interfaces and experiences that engage users and drive conversions.</p>
+                <div class="service-cta">Learn more →</div>
+            </div>
+        </div>
+    </div>
+</section>
+         <!-- Service Modals -->
+     <!-- Software Modal -->
+     <div class="modal fade" id="softwareModal" tabindex="-1" aria-labelledby="softwareModalLabel" aria-hidden="true">
+         <div class="modal-dialog modal-dialog-centered modal-lg">
+             <div class="modal-content">
+                 <div class="modal-header">
+                     <h5 class="modal-title" id="softwareModalLabel">Software Development Services</h5>
+                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                 </div>
+                 <div class="modal-body">
+                     <div class="row">
+                         <div class="col-12">
+                             <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Software Development" class="img-fluid rounded mb-4">
+                         </div>
+                         <div class="col-12">
+                             <h4>Custom Software Solutions</h4>
+                             <p>At Xenthis Technologies, we develop robust, scalable, and secure software solutions tailored to your specific business requirements. Our team specializes in transforming complex challenges into elegant digital solutions.</p>
+                             
+                             <h5 class="mt-4">Our Expertise</h5>
+                             <ul>
+                                 <li><strong>Web Applications:</strong> Responsive, high-performance web apps with modern frameworks</li>
+                                 <li><strong>Mobile Apps:</strong> Native and cross-platform solutions for iOS and Android</li>
+                                 
+                                 <li><strong>Cloud Solutions:</strong> Scalable cloud-native applications with AWS, Azure, GCP</li>
+                                 
+                             </ul>
+                             
+                             <h5 class="mt-4">Development Process</h5>
+                             <p>We follow agile methodologies with iterative development, continuous integration, and regular client feedback to ensure your software evolves with your business needs.</p>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+     
+     <!-- Hardware Modal -->
+     <div class="modal fade" id="hardwareModal" tabindex="-1" aria-labelledby="hardwareModalLabel" aria-hidden="true">
+         <div class="modal-dialog modal-dialog-centered modal-lg">
+             <div class="modal-content">
+                 <div class="modal-header">
+                     <h5 class="modal-title" id="hardwareModalLabel">Hardware Development Services</h5>
+                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                 </div>
+                 <div class="modal-body">
+                     <div class="row">
+                         <div class="col-12">
+                             <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Hardware Development" class="img-fluid rounded mb-4">
+                         </div>
+                         <div class="col-12">
+                             <h4>Innovative Hardware Solutions</h4>
+                             <p>Our hardware development services encompass the entire product lifecycle from concept to production, combining cutting-edge technology with practical design.</p>
+                             
+                             <h5 class="mt-4">Capabilities</h5>
+                             <ul>
+                                 <li><strong>Embedded Systems:</strong> Custom firmware and hardware for specialized applications</li>
+                                 <li><strong>IoT Devices:</strong> Connected devices with cloud integration and data analytics</li>
+                                 <li><strong>PCB Design:</strong> High-quality circuit design and rapid prototyping</li>
+                                 
+                             </ul>
+                             
+                             <h5 class="mt-4">Our Approach</h5>
+                             <p>We emphasize design for manufacturability, ensuring your product is not just innovative but also cost-effective to produce at scale.</p>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+     
+     <!-- AI Modal -->
+     <div class="modal fade" id="aiModal" tabindex="-1" aria-labelledby="aiModalLabel" aria-hidden="true">
+         <div class="modal-dialog modal-dialog-centered modal-lg">
+             <div class="modal-content">
+                 <div class="modal-header">
+                     <h5 class="modal-title" id="aiModalLabel">AI & Machine Learning Services</h5>
+                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                 </div>
+                 <div class="modal-body">
+                     <div class="row">
+                         <div class="col-12">
+                             <img src="https://images.unsplash.com/photo-1677442135136-760c813a743d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80" alt="AI & ML" class="img-fluid rounded mb-4">
+                         </div>
+                         <div class="col-12">
+                             <h4>Artificial Intelligence Solutions</h4>
+                             <p>We harness the power of AI and Machine Learning to create intelligent systems that transform businesses, automate processes, and unlock new opportunities.</p>
+                             
+                             <h5 class="mt-4">Our Expertise</h5>
+                             <ul>
+                                 <li><strong>Predictive Analytics:</strong> Forecast trends and behaviors with data modeling</li>
+                                 <li><strong>Computer Vision:</strong> Image and video recognition for various applications</li>
+                                 <li><strong>NLP:</strong> Chatbots, sentiment analysis, and text processing</li>
+                                 <li><strong>Recommendation Engines:</strong> Personalized content and product suggestions</li>
+                                 <li><strong>Process Automation:</strong> AI-driven workflow optimization</li>
+                             </ul>
+                             
+                             <h5 class="mt-4">Implementation</h5>
+                             <p>We focus on ethical AI development with explainable models that provide actionable insights while maintaining transparency and fairness.</p>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+     
+     <!-- Design Modal -->
+     <div class="modal fade" id="designModal" tabindex="-1" aria-labelledby="designModalLabel" aria-hidden="true">
+         <div class="modal-dialog modal-dialog-centered modal-lg">
+             <div class="modal-content">
+                 <div class="modal-header">
+                     <h5 class="modal-title" id="designModalLabel">Design & User Experience Services</h5>
+                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                 </div>
+                 <div class="modal-body">
+                     <div class="row">
+                         <div class="col-12">
+                             <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1528&q=80" alt="Design Services" class="img-fluid rounded mb-4">
+                         </div>
+                         <div class="col-12">
+                             <h4>Creative Design Solutions</h4>
+                             <p>Our design team creates visually stunning and highly functional interfaces that engage users and drive business results through thoughtful user experience design.</p>
+                             
+                             <h5 class="mt-4">Services</h5>
+                             <ul>
+                                 <li><strong>UI/UX Design:</strong> Intuitive interfaces with user-centered workflows</li>
+                                 <li><strong>Brand Identity:</strong> Logo, color schemes, and visual language development</li>
+                                 <li><strong>Graphic Design:</strong> Marketing materials, social media assets, and presentations</li>
+                                 <li><strong>Product Design:</strong> Physical and digital product aesthetics and ergonomics</li>
+                                 <li><strong>Video Editing:</strong>Professional editing for promotional videos, explainer content, reels, and brand stories with smooth transitions, engaging effects, and high-quality visuals. </li>
+                             </ul>
+                             
+                             <h5 class="mt-4">Our Process</h5>
+                             <p>We follow a research-driven approach with wireframing, prototyping, and user testing to ensure designs are not just beautiful but also highly functional and accessible.</p>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+
+    <!-- Project Counter Section -->
+    <section id="project-counter">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 counter-item">
+                    <div class="counter-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <div class="counter-text">Total Projects</div>
+                    <div class="text-white fw-bold mt-2" style="font-size:1.5rem;">10+</div>
+                </div>
+                <div class="col-md-4 counter-item">
+                    <div class="counter-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <div class="counter-text">Projects Completed</div>
+                    <div class="text-white fw-bold mt-2" style="font-size:1.5rem;">5+</div>
+                </div>
+                <div class="col-md-4 counter-item">
+                    <div class="counter-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <div class="counter-text">On-Going Projects</div>
+                    <div class="text-white fw-bold mt-2" style="font-size:1.5rem;">5+</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- Contact Section with Image -->
+<section id="contact">
+    <div class="container">
+        <h2 class="section-title text-center animate-on-scroll">Contact Us</h2>
+        <p class="text-center mb-5 animate-on-scroll" style="max-width: 700px; margin: 0 auto;">Let's collaborate to bring your ideas to life. Reach out to us for innovative solutions tailored to your needs.</p>
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="contact-details slide-in-left">
+                    <h3>Get In Touch</h3>
+                    <div class="contact-item">
+                        <!-- <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div> -->
+                        <!-- <div class="contact-detail">
+                            <h5>Address</h5>
+                            <p>Pollachi, Tamil Nadu, India</p>
+                        </div> -->
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-detail">
+                            <h5>Phone</h5>
+                            <a href="tel:+919944597940">+91 9944597940</a><br>
+                            <a href="tel:+918838903584">+91 8838903584</a>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-detail">
+                            <h5>Email</h5>
+                            <a href="mailto:xenthistechnologies@gmail.com">xenthistechnologies@gmail.com</a>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <h5>Follow Us</h5>
+                        <a href="https://www.linkedin.com/in/xenthis-technologies-18a2b0380?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" class="social-link"><i class="fab fa-linkedin"></i></a>
+                        
+                        <a href="https://www.instagram.com/xenthis.tech?igsh=dTBtNW9iczNjYnpv" class="social-link"><i class="fab fa-instagram"></i></a>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- QR Code Section -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="qr-section zoom-in">
+                    <h3>Quick Contact via Google Form</h3>
+                    <p class="qr-text">Scan this QR code to access our contact form directly</p>
+                    <div class="qr-code">
+                        <!-- Placeholder for QR code image - replace with your actual QR code -->
+                        <img src="Xenthis-contact.png" alt="QR Code for Google Form">
+                    </div>
+                    <p class="text-muted">Or click <a href="https://forms.gle/1g3MPr7tbqre1bE18" target="_blank">here</a> to open the form in your browser</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 footer-about">
+                    <a href="#" class="footer-logo">Xenthis <span>Technologies</span></a>
+                    <p>Define || Design || Deploy</p>
+                    <p>"Turning idea's into impact"</p>
+                </div>
+                <div class="col-lg-4 footer-links">
+                    <h5>Quick Links</h5>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 footer-links">
+                    <h5>Contact Info</h5>
+                    <div class="footer-contact-info">
+                        <div class="footer-contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Pollachi, Tamil Nadu, India</span>
+                        </div>
+                        <div class="footer-contact-item">
+                            <i class="fas fa-phone"></i>
+                            <a href="tel:+919944597940">+91 9944597940</a> || <a href="tel:+918838903584">+91 8838903584</a>
+                        </div>
+                        <div class="footer-contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <a href="mailto:xenthistechnologies@gmail.com">xenthistechnologies@gmail.com</a>
+                        </div>
+                    </div>
+                    <div class="footer-social-links">
+                        <a href="https://www.linkedin.com/in/xenthis-technologies-18a2b0380?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" class="footer-social-link"><i class="fab fa-linkedin"></i></a>
+                        <!-- <a href="#" class="footer-social-link"><i class="fab fa-twitter"></i></a> -->
+                        <a href="https://www.instagram.com/xenthis.tech?igsh=dTBtNW9iczNjYnpv" class="footer-social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="mailto:xenthistechnologies@gmail.com" class="footer-social-link"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Xenthis Technologies. All rights reserved. | Designed & Developed by <a href="#" class="text-primary">Xenthis Technologies</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Float -->
+    <a href="https://wa.me/919944597940" target="_blank" class="whatsapp-float">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Back to Top Button -->
+    <a href="#" class="back-to-top"><i class="fas fa-arrow-up"></i></a>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <!-- JavaScript -->
+    <script>
+       document.addEventListener('DOMContentLoaded', function() {
+            const progressBar = document.getElementById('progress');
+            const percentage = document.getElementById('percentage');
+            const message = document.getElementById('message');
+            const loadingScreen = document.getElementById('loadingScreen');
+            const mainContent = document.getElementById('mainContent');
+            
+            const messages = [
+                " ",
+                "Turning...",
+                "Ideas...",
+                "Into...",
+                "Impact..."
+            ];
+            
+            let width = 0;
+            let currentMessage = 0;
+            
+            // Update progress bar
+            const interval = setInterval(() => {
+                width += 1;
+                progressBar.style.width = width + '%';
+                percentage.textContent = width + '%';
+                
+                // Update message every 20% progress
+                if (width % 20 === 0 && currentMessage < messages.length - 1) {
+                    currentMessage++;
+                    message.textContent = messages[currentMessage];
+                }
+                
+                if (width >= 100) {
+                    clearInterval(interval);
+                    message.textContent = "Welcome!";
+                    message.classList.add('completed');
+                    percentage.classList.add('completed');
+                    
+                    // After completion, hide loading screen and show main content
+                    setTimeout(() => {
+                        loadingScreen.style.opacity = '0';
+                        loadingScreen.style.visibility = 'hidden';
+                        
+                        // Show main content
+                        mainContent.style.opacity = '1';
+                        
+                        // Initialize animations for main content
+                        animateOnScroll();
+                    }, 800);
+                }
+            }, 48); // 48ms * 100 = 4800ms (4.8s) + 200ms buffer = 5s total
+        });
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            const aboutSection = document.getElementById('about');
+            const aboutSectionTop = aboutSection.offsetTop;
+            
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+            
+            // Show navbar when scrolled to about section
+            if (window.scrollY > aboutSectionTop - 100) {
+                navbar.classList.add('visible');
+            } else {
+                navbar.classList.remove('visible');
+            }
+        });
+
+        // Update active nav-link on scroll
+        function updateActiveNav() {
+            const sections = ['home', 'about', 'services', 'contact'];
+            const scrollPos = window.scrollY + 100; // Offset for navbar height
+            let currentSection = 'home';
+
+            sections.forEach(section => {
+                const el = document.getElementById(section);
+                if (el && el.offsetTop <= scrollPos) {
+                    currentSection = section;
+                }
+            });
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${currentSection}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateActiveNav);
+        
+        // Auto close navbar when clicking a link
+        document.querySelectorAll('.nav-link').forEach(navLink => {
+            navLink.addEventListener('click', () => {
+                const navbarToggler = document.querySelector('.navbar-toggler');
+                if (!navbarToggler.classList.contains('collapsed')) {
+                    navbarToggler.click();
+                }
+            });
+        });
+
+        // Smooth Scroll for Anchor Links
+        document.querySelectorAll('.nav-link, .scroll-down a, .footer-links a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                if (this.getAttribute('href').startsWith('#')) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+
+        // Back to Top Button
+        const backToTop = document.querySelector('.back-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('active');
+            } else {
+                backToTop.classList.remove('active');
+            }
+        });
+
+        // Enhanced scroll animations
+        function animateOnScroll() {
+            document.querySelectorAll('.animate-on-scroll, .slide-in-left, .slide-in-right, .zoom-in, .fade-in-up, .fade-in-down, .scale-in, .flip-in').forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < window.innerHeight - 50) {
+                    el.classList.add('animated');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', animateOnScroll);
+        window.addEventListener('load', animateOnScroll);
+        
+        // Contact form submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Simple form validation
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            if (name && email && subject && message) {
+                // Here you would typically send the form data to a server
+                // For now, we'll just show an alert
+                alert('Thank you for your message! We will get back to you soon.');
+                this.reset();
+            } else {
+                alert('Please fill in all fields.');
+            }
+        });
+        
+        // NEW: Additional animation effects on scroll
+        function createParticles() {
+            const particlesContainer = document.querySelector('.particles');
+            if (!particlesContainer) return;
+            
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random properties
+                const size = Math.random() * 10 + 2;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const delay = Math.random() * 15;
+                const duration = Math.random() * 10 + 15;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}%`;
+                particle.style.top = `${posY}%`;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.animationDuration = `${duration}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Initialize particles
+        createParticles();
+    </script>
+</body>
+</html>
